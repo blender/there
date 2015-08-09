@@ -10,6 +10,10 @@ import Foundation
 
 let ThereErrorDomain = "com.allocinit.there"
 
+func performOnQueue(callBackQueue:dispatch_queue_t, a:()->() ){
+    
+    dispatch_async(callBackQueue, a)
+}
 
 public enum ThereError:Int {
     

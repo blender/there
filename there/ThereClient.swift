@@ -32,7 +32,7 @@ public class ThereClient {
         self.requestGenerator = ThereRequestGenerator(appId: self.appId, appCode: self.appCode)
     }
     
-    public func searchWithTerm(term:String, onCompletion:ThereSearchCallBack) {
+    public func searchWithTerm(term:String, callBackQueue:dispatch_queue_t = dispatch_get_main_queue(), onCompletion:ThereSearchCallBack) {
         
         self.searchSession.getTasksWithCompletionHandler{ [weak self](dataTasks, uploadTasks, downloadTasks) in
             
@@ -56,19 +56,22 @@ public class ThereClient {
                         case .Left(let box):
                             return box.value
                         case .Right(let box):
-                            onCompletion(box.value, nil)
+                            performOnQueue(callBackQueue){
+                                onCompletion(box.value, nil)
+                            }
                             return nil
                         }
                     }).fail({ (error) -> () in
-                        
-                        onCompletion(nil, error)
+                        performOnQueue(callBackQueue){
+                            onCompletion(nil, error)
+                        }
                     })
                 }
             }
         }
     }
     
-    public func routeWithWayPoins(wayPoints:[(Double, Double)], mode:String, onCompletion:ThereRouteCallBack) {
+    public func routeWithWayPoins(wayPoints:[(Double, Double)], mode:String, callBackQueue:dispatch_queue_t = dispatch_get_main_queue(), onCompletion:ThereRouteCallBack) {
         
         
         self.routeSession.getTasksWithCompletionHandler{ [weak self](dataTasks, uploadTasks, downloadTasks) in
@@ -93,12 +96,15 @@ public class ThereClient {
                         case .Left(let box):
                             return box.value
                         case .Right(let box):
-                            onCompletion(box.value, nil)
+                            performOnQueue(callBackQueue){
+                                onCompletion(box.value, nil)
+                            }
                             return nil
                         }
                     }).fail({ (error) -> () in
-
-                        onCompletion(nil, error)
+                        performOnQueue(callBackQueue){
+                            onCompletion(nil, error)
+                        }
                     })
                 }
             }
