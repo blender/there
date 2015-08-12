@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ThereWayPoint: Printable, Equatable {
+public struct ThereWayPoint: Printable, Equatable, Hashable {
     
     public let lat:Double
     public let lon:Double
@@ -21,6 +21,12 @@ public struct ThereWayPoint: Printable, Equatable {
     init(lat:Double, lon:Double){
         self.lat = lat
         self.lon = lon
+    }
+    
+    public var hashValue : Int {
+        get {
+            return "\(self.lat),\(self.lon)".hashValue
+        }
     }
 }
     

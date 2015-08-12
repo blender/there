@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		DB4081561B762D7500AA8BB7 /* there.h in Headers */ = {isa = PBXBuildFile; fileRef = DB4081551B762D7500AA8BB7 /* there.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB40815C1B762D7500AA8BB7 /* there.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4081501B762D7500AA8BB7 /* there.framework */; };
-		DB4081631B762D7500AA8BB7 /* thereClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4081621B762D7500AA8BB7 /* thereClientTests.swift */; };
+		DB4081631B762D7500AA8BB7 /* ThereClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4081621B762D7500AA8BB7 /* ThereClientTests.swift */; };
 		DB40816D1B762DEB00AA8BB7 /* ThereClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB40816C1B762DEB00AA8BB7 /* ThereClient.swift */; };
 		DB4081701B762E9900AA8BB7 /* ThereUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB40816E1B762E9900AA8BB7 /* ThereUtils.swift */; };
 		DB4081711B762E9900AA8BB7 /* ThereLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB40816F1B762E9900AA8BB7 /* ThereLogging.swift */; };
 		DB4081731B76304000AA8BB7 /* ThereRequestGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4081721B76304000AA8BB7 /* ThereRequestGenerator.swift */; };
 		DB8E72831B7665A700737478 /* ThereWayPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E72821B7665A700737478 /* ThereWayPoint.swift */; };
 		DB8E72851B7670B200737478 /* ThereLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E72841B7670B200737478 /* ThereLocation.swift */; };
+		DBB834D31B7BDA7A00A575EA /* ThereRequestGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB834D21B7BDA7A00A575EA /* ThereRequestGeneratorTests.swift */; };
 		DBDD9E751B7637D500942D58 /* ThereTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDD9E741B7637D500942D58 /* ThereTestCase.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,13 +36,14 @@
 		DB4081551B762D7500AA8BB7 /* there.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = there.h; sourceTree = "<group>"; };
 		DB40815B1B762D7500AA8BB7 /* thereTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = thereTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB4081611B762D7500AA8BB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DB4081621B762D7500AA8BB7 /* thereClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thereClientTests.swift; sourceTree = "<group>"; };
+		DB4081621B762D7500AA8BB7 /* ThereClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThereClientTests.swift; sourceTree = "<group>"; };
 		DB40816C1B762DEB00AA8BB7 /* ThereClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereClient.swift; sourceTree = "<group>"; };
 		DB40816E1B762E9900AA8BB7 /* ThereUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereUtils.swift; sourceTree = "<group>"; };
 		DB40816F1B762E9900AA8BB7 /* ThereLogging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereLogging.swift; sourceTree = "<group>"; };
 		DB4081721B76304000AA8BB7 /* ThereRequestGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereRequestGenerator.swift; sourceTree = "<group>"; };
 		DB8E72821B7665A700737478 /* ThereWayPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereWayPoint.swift; sourceTree = "<group>"; };
 		DB8E72841B7670B200737478 /* ThereLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereLocation.swift; sourceTree = "<group>"; };
+		DBB834D21B7BDA7A00A575EA /* ThereRequestGeneratorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereRequestGeneratorTests.swift; sourceTree = "<group>"; };
 		DBDD9E741B7637D500942D58 /* ThereTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThereTestCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,8 +109,9 @@
 		DB40815F1B762D7500AA8BB7 /* thereTests */ = {
 			isa = PBXGroup;
 			children = (
-				DB4081621B762D7500AA8BB7 /* thereClientTests.swift */,
+				DB4081621B762D7500AA8BB7 /* ThereClientTests.swift */,
 				DBDD9E741B7637D500942D58 /* ThereTestCase.swift */,
+				DBB834D21B7BDA7A00A575EA /* ThereRequestGeneratorTests.swift */,
 				DB4081601B762D7500AA8BB7 /* Supporting Files */,
 			);
 			path = thereTests;
@@ -251,8 +254,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBB834D31B7BDA7A00A575EA /* ThereRequestGeneratorTests.swift in Sources */,
 				DBDD9E751B7637D500942D58 /* ThereTestCase.swift in Sources */,
-				DB4081631B762D7500AA8BB7 /* thereClientTests.swift in Sources */,
+				DB4081631B762D7500AA8BB7 /* ThereClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

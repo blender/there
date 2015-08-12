@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ThereLocation: Printable, Equatable {
+public struct ThereLocation: Printable, Equatable, Hashable {
 
     public let wayPoint:ThereWayPoint
     public let address:String
@@ -28,6 +28,14 @@ public struct ThereLocation: Printable, Equatable {
         
         self.wayPoint = wayPoint
         self.address = address
+    }
+    
+    public var hashValue : Int {
+        get {
+            let addressHash = "\(address) - \(wayPoint.lat),\(wayPoint.lon)".hashValue
+
+            return addressHash
+        }
     }
 }
 

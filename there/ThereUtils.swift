@@ -10,11 +10,6 @@ import Foundation
 
 let ThereErrorDomain = "com.allocinit.there"
 
-func performOnQueue(callBackQueue:dispatch_queue_t, a:()->() ){
-    
-    dispatch_async(callBackQueue, a)
-}
-
 public enum ThereError:Int {
     
     case MalformedURL = -1001
@@ -22,16 +17,27 @@ public enum ThereError:Int {
     case MalformedJSON
 }
 
-enum Either<T,U> {
+public enum ThereRoutingMode:String {
+    
+    case FastestCar = "fastest;car"
+}
+
+
+func performOnQueue(callBackQueue:dispatch_queue_t, a:()->() ){
+    
+    dispatch_async(callBackQueue, a)
+}
+
+public enum Either<T,U> {
     
     case Left(Box<T>)
     case Right(Box<U>)
 }
 
-final class Box<T> {
-    let value: T
+public final class Box<T> {
+    public let value: T
     
-    init(value: T) {
+   public init(value: T) {
         self.value = value
     }
 }

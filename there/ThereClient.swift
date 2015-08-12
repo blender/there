@@ -71,7 +71,7 @@ public class ThereClient {
         }
     }
     
-    public func routeWithWayPoins(wayPoints:[(Double, Double)], mode:String, callBackQueue:dispatch_queue_t = dispatch_get_main_queue(), onCompletion:ThereRouteCallBack) {
+    public func routeWithWayPoins(wayPoints:[(Double, Double)], mode:ThereRoutingMode, callBackQueue:dispatch_queue_t = dispatch_get_main_queue(), onCompletion:ThereRouteCallBack) {
         
         
         self.routeSession.getTasksWithCompletionHandler{ [weak self](dataTasks, uploadTasks, downloadTasks) in
@@ -184,8 +184,6 @@ extension ThereClient {
                                                     return self.malformedLocationJSONError()
                                                 }
                                             }
-                                            
-                                            
                                         }
                                         else {
                                             return self.malformedLocationJSONError()
@@ -203,6 +201,7 @@ extension ThereClient {
                 
             }
         }
+        
         return self.malformedLocationJSONError()
     }
     
@@ -226,19 +225,29 @@ extension ThereClient {
                             if let aRoute = routes[0] as? [String:AnyObject] {
                                 
                                 // Singular noun for something that is acutally a list.
-                                if let waypoints = aRoute["waypoint"] as? [AnyObject] {
+                                if let legs = aRoute["leg"] as? [AnyObject] {
                                     
                                     var points = [ThereWayPoint]()
                                     
-                                    for aWayPoint in waypoints {
+                                    for aLeg in legs {
                                         
-                                        if let aWayPoint = aWayPoint as? [String:AnyObject] {
+                                        if let aLeg = aLeg as? [String:AnyObject] {
                                         
-                                            if let mappedPosition = aWayPoint["mappedPosition"] as? [String:Double] {
+                                            // Singular noun for something that is acutally a list.
+                                            if let maneuvers = aLeg["maneuver"] as? [[String:AnyObject]] {
                                                 
-                                                if let lat = mappedPosition["latitude"], let lon = mappedPosition["longitude"] {
-                                                
-                                                    points = points + [ThereWayPoint(lat:lat, lon:lon)]
+                                                for aManeuver in maneuvers {
+                                                    
+                                                    if let position = aManeuver["position"] as? [String:AnyObject] {
+                                                        
+                                                        if  let error = self.addWayPointTo(&points, forMappedPosition:position) {
+                                                            
+                                                            return malformedWayPointJSONError()
+                                                        }
+                                                        else {
+                                                            LogDebug("Leg: \(aLeg) - WayPoint: \(points.last)")
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -259,10 +268,28 @@ extension ThereClient {
         return self.malformedWayPointJSONError()
     }
     
+    private func addWayPointTo(inout points:[ThereWayPoint], forMappedPosition mappedPosition:[String:AnyObject]) -> NSError? {
+    
+        if let lat = mappedPosition["latitude"] as? Double, let lon = mappedPosition["longitude"] as? Double {
+            
+            points = points + [ThereWayPoint(lat:lat, lon:lon)]
+            return nil
+        }
+        else {
+            
+            return self.defaultRoutingVaidationError
+        }
+    }
+    
     private func malformedLocationJSONError() -> Either<NSError, [ThereLocation]> {
-        return  Either.Left(Box(value: NSError(domain: ThereErrorDomain,
+        return  Either.Left(Box(value: self.defaultRoutingVaidationError))
+    }
+    
+    private var defaultRoutingVaidationError: NSError {
+        
+        return NSError(domain: ThereErrorDomain,
             code:ThereError.MalformedJSON.rawValue,
-            userInfo:[NSLocalizedDescriptionKey:"JSON does not pass validation for search"])))
+            userInfo:[NSLocalizedDescriptionKey:"JSON does not pass validation for routing"])
     }
     
     private func malformedWayPointJSONError() -> Either<NSError, [ThereWayPoint]> {

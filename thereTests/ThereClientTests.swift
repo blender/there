@@ -1,5 +1,5 @@
 //
-//  thereTests.swift
+//  ThereClientTests.swift
 //  thereTests
 //
 //  Created by Tommaso Piazza on 08/08/15.
@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class thereClientTests: ThereTestCase {
+class ThereClientTests: ThereTestCase {
     
     func testThatSearchReturnsALocation() {
         
@@ -38,11 +38,11 @@ class thereClientTests: ThereTestCase {
             [(52.5083774,13.4527931),
                 (52.5100621,13.4556041),
                 (52.5109893,13.4413884)],
-            mode: "fastest;car") { (wayPoints, error) -> () in
+            mode: .FastestCar) { (wayPoints, error) -> () in
                 
                 requestCompletedExpectation.fulfill()
                 
-                XCTAssertTrue(wayPoints?.count == 3, "There was an unexpected error")
+                XCTAssertTrue(wayPoints?.count > 0, "There was an unexpected error")
         }
         
         self.waitForExpectationsWithTimeout(100) { (error) -> Void in

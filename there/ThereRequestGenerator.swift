@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class ThereRequestGenerator {
+public class ThereRequestGenerator {
     
     static let geoCodederHost:String = "geocoder.cit.api.here.com"
     static let routeHost:String = "route.cit.api.here.com"
@@ -21,7 +21,7 @@ internal class ThereRequestGenerator {
     let appId:String
     let appCode:String
     
-    init(appId:String, appCode:String){
+    public init(appId:String, appCode:String){
         self.appId = appId
         self.appCode = appCode
     }
@@ -31,7 +31,7 @@ internal class ThereRequestGenerator {
         return "app_id=\(self.appId)&app_code=\(self.appCode)"
     }
     
-    internal func searchRequestWithParameters(term:String) -> Either<NSError, NSURLRequest> {
+    public func searchRequestWithParameters(term:String) -> Either<NSError, NSURLRequest> {
         
         switch self.requestWithParameters(ThereRequestGenerator.geoCodederHost,
             apiVersion:6.2,
@@ -46,13 +46,13 @@ internal class ThereRequestGenerator {
             let finalSearchTerm = escapedSearchTerm ?? ""
             LogDebug("Escaped search term from \(term) to \(finalSearchTerm)")
             let finalURLString = url.absoluteString!+"&searchtext=\(finalSearchTerm)"
-            LogDebug("Create request with URL: \(finalURLString)")
+            LogDebug("Created request with URL: \(finalURLString)")
             return Either.Right(Box(value: NSURLRequest(URL: NSURL(string: finalURLString)!)))
         }
     }
     
-    internal func routeRequestWithParameters(wayPoints:[(Double, Double)],
-        mode:String) -> Either<NSError, NSURLRequest> {
+    public func routeRequestWithParameters(wayPoints:[(Double, Double)],
+        mode:ThereRoutingMode) -> Either<NSError, NSURLRequest> {
     
         if wayPoints.count < 2 {
             return Either.Left(Box(value: NSError(domain: ThereErrorDomain,
@@ -72,7 +72,7 @@ internal class ThereRequestGenerator {
         }
         
         let allWayPointsQueryString = "&".join(wayPointsWithWayPointIndex)
-        let queryString = allWayPointsQueryString + "&mode=\(mode)" + "&" + self.appCreantialsQuery()
+        let queryString = allWayPointsQueryString + "&mode=\(mode.rawValue)" + "&" + self.appCreantialsQuery()
         
         switch self.requestWithParameters(ThereRequestGenerator.routeHost,
             path:ThereRequestGenerator.routingPath,
@@ -84,6 +84,7 @@ internal class ThereRequestGenerator {
             return Either.Left(box)
         case .Right(let box):
             let url:NSURL! = box.value.URL
+            LogDebug("Created request with URL: \(url)")
             return Either.Right(Box(value: NSURLRequest(URL: url)))
         }
     }
