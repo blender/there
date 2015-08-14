@@ -18,6 +18,16 @@ public struct ThereWayPoint: Printable, Equatable, Hashable {
         return "<< (lat:\(lat), lon:\(lon)) >>"
     }
     
+    /**
+    Initializes a new ThereWaypoint with the latitue and longitude values provided.
+    
+    :param: lat The latitude value.
+    :param: lon The longitude value.
+    
+    
+    :returns: A new ThereWaypoint.
+    */
+    
     init(lat:Double, lon:Double){
         self.lat = lat
         self.lon = lon

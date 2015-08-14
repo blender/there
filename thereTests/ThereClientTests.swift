@@ -19,7 +19,7 @@ class ThereClientTests: ThereTestCase {
             
             requestCompletedExpectation.fulfill()
             println(locations)
-            XCTAssertTrue(error == nil, "There was an unexpected error")
+            XCTAssertTrue(error == nil, "No locations where returned")
         })
         
         self.waitForExpectationsWithTimeout(3) { (error) -> Void in
@@ -30,7 +30,26 @@ class ThereClientTests: ThereTestCase {
         }
     }
     
-    func testThatRouteReturnsThreeWayPoints() {
+    func testThatSearchHandlesApiError() {
+        
+        let requestCompletedExpectation = self.expectationWithDescription("Request did complete")
+        
+        self.defaultClient.searchWithTerm("", onCompletion: { (locations, error) -> () in
+            
+            requestCompletedExpectation.fulfill()
+            println(error)
+            XCTAssertTrue(error != nil, "Expected and error but none was raised")
+        })
+        
+        self.waitForExpectationsWithTimeout(3) { (error) -> Void in
+            
+            if (error != nil) {
+                println("Expectation Failed")
+            }
+        }
+    }
+    
+    func testThatRouteReturnsSomeWayPoints() {
         
         let requestCompletedExpectation = self.expectationWithDescription("Request did complete")
         
@@ -42,7 +61,29 @@ class ThereClientTests: ThereTestCase {
                 
                 requestCompletedExpectation.fulfill()
                 
-                XCTAssertTrue(wayPoints?.count > 0, "There was an unexpected error")
+                XCTAssertTrue(wayPoints?.count > 0, "No waypoints were returned")
+        }
+        
+        self.waitForExpectationsWithTimeout(100) { (error) -> Void in
+            
+            if (error != nil) {
+                println("Expectation Failed")
+            }
+        }
+    }
+    
+    func testThatRouteHandlesApiError() {
+        
+        let requestCompletedExpectation = self.expectationWithDescription("Request did complete")
+        
+        self.defaultClient.routeWithWayPoins(
+            [(52.5083774,13.4527931),
+                (53.6152324,4.2193782)], //This is in the middle of the sea
+            mode: .FastestCar) { (wayPoints, error) -> () in
+                
+                requestCompletedExpectation.fulfill()
+                println(error)
+                XCTAssertTrue(error != nil, "No waypoints were returned")
         }
         
         self.waitForExpectationsWithTimeout(100) { (error) -> Void in

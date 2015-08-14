@@ -8,6 +8,8 @@
 
 import Foundation
 
+// This is public for testing reasons. In Swift 2.0 this would have visibility "testable"
+
 public class ThereRequestGenerator {
     
     static let geoCodederHost:String = "geocoder.cit.api.here.com"
@@ -57,7 +59,7 @@ public class ThereRequestGenerator {
         if wayPoints.count < 2 {
             return Either.Left(Box(value: NSError(domain: ThereErrorDomain,
                 code: ThereError.MalformedParameters.rawValue,
-                userInfo:[NSLocalizedDescriptionKey:"A routing request required 2 or more waypoints."])))
+                userInfo:[NSLocalizedDescriptionKey:"A routing request requires 2 or more waypoints."])))
         }
         
         let wayPointsAsStrings = wayPoints.map { (lat, lon) -> String in

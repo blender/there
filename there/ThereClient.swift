@@ -25,12 +25,32 @@ public class ThereClient {
     private(set) var routeSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
     
     
+    /**
+    Initializes a new client with the provided appId and appCode.
+    
+    :param: appId The id of the application registered with the here API.
+    :param: appCode The code of the application registred with the here API.
+
+    
+    :returns: A new client.
+    */
+    
     public init(appId:String, appCode:String){
         
         self.appId = appId
         self.appCode = appCode
         self.requestGenerator = ThereRequestGenerator(appId: self.appId, appCode: self.appCode)
     }
+    
+    /**
+    Initiates a new geocoding request for free form input. Cancels previous ongoing requests.
+    
+    :param: term The free form search term representing the location to geocode.
+    :param: callBackQueue The queue on which to received the callbalck. Optional. Defaults to *dispatch_get_main_queue()*.
+    :param: onCompletion The callback to be executed on completion.
+    
+    :returns: A new client.
+    */
     
     public func searchWithTerm(term:String, callBackQueue:dispatch_queue_t = dispatch_get_main_queue(), onCompletion:ThereSearchCallBack) {
         
@@ -70,6 +90,17 @@ public class ThereClient {
             }
         }
     }
+    
+    
+    /**
+    Initiates a new routing request given a set of waypoints. Cancels previous ongoing requests.
+    
+    :param: wayPoints The list of waypoints the route should touch. A minimum of two waypoints are required to calculare a route.
+    :param: callBackQueue The queue on which to received the callbalck. Optional. Defaults to *dispatch_get_main_queue()*.
+    :param: onCompletion The callback to be executed on completion.
+    
+    :returns: A new client.
+    */
     
     public func routeWithWayPoins(wayPoints:[(Double, Double)], mode:ThereRoutingMode, callBackQueue:dispatch_queue_t = dispatch_get_main_queue(), onCompletion:ThereRouteCallBack) {
         
@@ -198,7 +229,15 @@ extension ThereClient {
                         }
                     }
                 }
-                
+                else {
+                    
+                    //Some key are upper case, some are lower case
+                    if let type = data["type"] as? String,
+                        let details = data["Details"] as? String {
+                            
+                            return self.malformedLocationJSONError(message:details)
+                    }
+                }
             }
         }
         
@@ -262,6 +301,15 @@ extension ThereClient {
                         }
                     }
                 }
+                else {
+                    
+                    //Details is lowercase here but uppercase for the other api
+                    if let type = data["type"] as? String,
+                        let details = data["details"] as? String {
+                            
+                            return self.malformedWayPointJSONError(message:details)
+                    }
+                }
             }
         }
         
@@ -281,20 +329,41 @@ extension ThereClient {
         }
     }
     
-    private func malformedLocationJSONError() -> Either<NSError, [ThereLocation]> {
-        return  Either.Left(Box(value: self.defaultRoutingVaidationError))
+    private func malformedLocationJSONError(message:String? = nil) -> Either<NSError, [ThereLocation]> {
+        
+        if let message = message {
+            
+            return Either.Left(Box(value: self.validationErrorWithMessage(message)))
+        }
+        else {
+           return Either.Left(Box(value: self.defaultSearchValidationError))
+        }
+    }
+    
+    private func validationErrorWithMessage(message:String) -> NSError {
+        
+        return NSError(domain: ThereErrorDomain,
+            code:ThereError.MalformedJSON.rawValue,
+            userInfo:[NSLocalizedDescriptionKey:message])
     }
     
     private var defaultRoutingVaidationError: NSError {
         
-        return NSError(domain: ThereErrorDomain,
-            code:ThereError.MalformedJSON.rawValue,
-            userInfo:[NSLocalizedDescriptionKey:"JSON does not pass validation for routing"])
+        return self.validationErrorWithMessage("JSON does not pass validation for routing")
     }
     
-    private func malformedWayPointJSONError() -> Either<NSError, [ThereWayPoint]> {
-        return  Either.Left(Box(value: NSError(domain: ThereErrorDomain,
-            code:ThereError.MalformedJSON.rawValue,
-            userInfo:[NSLocalizedDescriptionKey:"JSON does not pass validation for search"])))
+    private var defaultSearchValidationError: NSError {
+        return  self.validationErrorWithMessage("JSON does not pass validation for search")
+    }
+    
+    private func malformedWayPointJSONError(message:String? = nil) -> Either<NSError, [ThereWayPoint]> {
+        
+        if let message = message {
+            
+            return Either.Left(Box(value: self.validationErrorWithMessage(message)))
+        }
+        else {
+            return Either.Left(Box(value: self.defaultRoutingVaidationError))
+        }
     }
 }

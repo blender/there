@@ -8,7 +8,11 @@
 
 import Foundation
 
+// MARK: Constants
+
 let ThereErrorDomain = "com.allocinit.there"
+
+// MARK: Public stuff
 
 public enum ThereError:Int {
     
@@ -22,12 +26,6 @@ public enum ThereRoutingMode:String {
     case FastestCar = "fastest;car"
 }
 
-
-func performOnQueue(callBackQueue:dispatch_queue_t, a:()->() ){
-    
-    dispatch_async(callBackQueue, a)
-}
-
 public enum Either<T,U> {
     
     case Left(Box<T>)
@@ -37,10 +35,18 @@ public enum Either<T,U> {
 public final class Box<T> {
     public let value: T
     
-   public init(value: T) {
+    public init(value: T) {
         self.value = value
     }
 }
+
+// MARK: Internal Stuff
+
+func performOnQueue(callBackQueue:dispatch_queue_t, a:()->() ){
+    
+    dispatch_async(callBackQueue, a)
+}
+
 
 typealias NSURLRequestCallBack = (data:NSData!, response:NSURLResponse!, error:NSError!)->NSError?
 

@@ -18,11 +18,32 @@ public struct ThereLocation: Printable, Equatable, Hashable {
         return "<< address: \(address), wayPoint:\(wayPoint) >>"
     }
     
+    /**
+    Initializes a new ThereLocation with the latitue, longitude and address values provided.
+    
+    :param: lat The latitude value.
+    :param: lon The longitude value.
+    :param: address A String representing the address of this location.
+    
+    
+    :returns: A new ThereLocation.
+    */
+    
     public init(lat:Double, lon:Double, address:String){
         
         self.wayPoint = ThereWayPoint(lat:lat, lon:lon)
         self.address = address
     }
+    
+    /**
+    Initializes a new ThereWaypoint with the ThereWayPoint and address values provided.
+    
+    :param: wayPoint The ThereWayPoint.
+    :param: address A String representing the address of this location.
+    
+    
+    :returns: A new ThereLocation.
+    */
     
     public init(wayPoint:ThereWayPoint, address:String) {
         
